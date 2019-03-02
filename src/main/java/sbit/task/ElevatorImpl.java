@@ -63,10 +63,12 @@ public class ElevatorImpl implements Elevator {
             if (currentFloor > floor) {
                 state = State.MOVING_DOWN;
                 --currentFloor;
+                tryPickUp();
 
             } else {
                 state = State.MOVING_UP;
                 ++currentFloor;
+                tryPickUp();
             }
 
             Thread.sleep(floorReachTime);
@@ -75,6 +77,19 @@ public class ElevatorImpl implements Elevator {
 
         System.out.println("Arrived to the requested floor " + floor);
         System.out.println("Door closed");
+    }
+
+    private void tryPickUp() {
+        TreeSet<Integer> requests = state == State.MOVING_UP ? upFloors : downFloors;
+
+        if (!requests.isEmpty()) {
+            Integer order = requests.first();
+            if (currentFloor == order) {
+                requests.pollFirst();
+                System.out.println("Picked up on floor " + currentFloor);
+                System.out.println("Door closed");
+            }
+        }
     }
 
     private enum State {
