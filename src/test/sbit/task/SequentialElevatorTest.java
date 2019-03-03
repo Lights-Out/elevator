@@ -31,20 +31,18 @@ public class SequentialElevatorTest {
     public void shouldInterruptMovingOnStopCommand() throws InterruptedException {
 
         SequentialElevator elevator = new SequentialElevator(1);
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        elevator.requestUp(1, 4);
+        elevator.requestUp(2, 3);
+        elevator.requestUp(2, 3);
+        elevator.requestUp(2, 3);
+        elevator.requestStop();
+        elevator.requestStop();
+        elevator.requestStop();
+        elevator.requestDown(4, 2);
+        elevator.requestDown(7, 1);
 
-        executor.execute(() -> {
-            elevator.requestUp(1, 4);
-            elevator.requestUp(2, 3);
-            elevator.requestUp(2, 3);
-            elevator.requestUp(2, 3);
-            elevator.requestStop();
-            elevator.requestStop();
-            elevator.requestStop();
-            elevator.requestDown(4, 2);
-            elevator.requestDown(7, 1);
-            elevator.run();
-        });
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(elevator::run);
 
         Thread.sleep(DELAY_TIME);
         executor.shutdown();
@@ -72,21 +70,19 @@ public class SequentialElevatorTest {
     public void shouldProceedOnAlternatingStopAndFloorCommands() throws InterruptedException {
 
         SequentialElevator elevator = new SequentialElevator(1);
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        elevator.requestUp(1, 4);
+        elevator.requestUp(2, 3);
+        elevator.requestStop();
+        elevator.requestStop();
+        elevator.requestUp(2, 3);
+        elevator.requestUp(2, 3);
+        elevator.requestStop();
+        elevator.requestStop();
+        elevator.requestDown(4, 2);
+        elevator.requestDown(7, 1);
 
-        executor.execute(() -> {
-            elevator.requestUp(1, 4);
-            elevator.requestUp(2, 3);
-            elevator.requestStop();
-            elevator.requestStop();
-            elevator.requestUp(2, 3);
-            elevator.requestUp(2, 3);
-            elevator.requestStop();
-            elevator.requestStop();
-            elevator.requestDown(4, 2);
-            elevator.requestDown(7, 1);
-            elevator.run();
-        });
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(elevator::run);
 
         Thread.sleep(DELAY_TIME);
         executor.shutdown();
@@ -97,17 +93,16 @@ public class SequentialElevatorTest {
     public void shouldInterruptMovingOnStopGoStopCommand() throws InterruptedException {
 
         SequentialElevator elevator = new SequentialElevator(1);
+        elevator.requestUp(1, 4);
+        elevator.requestUp(2, 3);
+        elevator.requestStop();
+        elevator.requestUp(3, 5);
+        elevator.requestStop();
+        elevator.requestDown(4, 2);
+        elevator.requestDown(7, 1);
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> {
-            elevator.requestUp(1, 4);
-            elevator.requestUp(2, 3);
-            elevator.requestStop();
-            elevator.requestUp(3, 5);
-            elevator.requestStop();
-            elevator.requestDown(4, 2);
-            elevator.requestDown(7, 1);
-            elevator.run();
-        });
+        executor.execute(elevator::run);
         Thread.sleep(DELAY_TIME);
         executor.shutdown();
         assertThat(elevator.orderedRequests, not(empty()));
