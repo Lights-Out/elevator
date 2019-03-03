@@ -2,6 +2,7 @@ package sbit.task;
 
 public interface Elevator {
     void run();
-    void requestUp(int floor);
-    void requestDown(int floor);
+    void requestUp(int floorFrom, int floorTo);
+    void requestDown(int floorFrom, int floorTo);
+    void requestStop();
 }
