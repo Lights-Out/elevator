@@ -1,9 +1,6 @@
 package sbit.task;
 
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.Queue;
-import java.util.TreeSet;
+import java.util.*;
 
 public class SequentialElevator implements Elevator {
 
@@ -63,6 +60,21 @@ public class SequentialElevator implements Elevator {
         }
     }
 
+    Optional<Integer> highestFloor() {
+        return getLastFloorFrom(upFloors);
+    }
+
+    Optional<Integer> lowestFloor() {
+        return getLastFloorFrom(downFloors);
+    }
+
+    private Optional<Integer> getLastFloorFrom(TreeSet<Request> target) {
+        return Optional.ofNullable(target)
+                .filter(collection ->  !collection.isEmpty())
+                .map(TreeSet::last)
+                .map(Request::getFloor);
+    }
+
     /**
      * Puts request to both set and queue without duplicates.
      * @param floor requested floor
@@ -85,7 +97,7 @@ public class SequentialElevator implements Elevator {
         while (currentFloor != floor) {
             checkStoppedState();
 
-            System.out.println("start moving from " + currentFloor + " to " + floor);
+            print("start moving from " + currentFloor + " to " + floor);
             if (currentFloor > floor) {
                 state = State.MOVING_DOWN;
                 --currentFloor;
@@ -98,16 +110,16 @@ public class SequentialElevator implements Elevator {
             }
 
             Thread.sleep(floorReachTime);
-            System.out.println("On floor " + currentFloor);
+            print("On floor " + currentFloor);
         }
 
         notifyAboutCompletedRequest();
     }
 
     private void notifyAboutCompletedRequest() {
-        System.out.println("[" + currentFloor + "] Door opened");
-        System.out.println("Request to floor [" + currentFloor + "] completed");
-        System.out.println("[" + currentFloor + "] Door closed");
+        print("[" + currentFloor + "] Door opened");
+        print("Request to floor [" + currentFloor + "] completed");
+        print("[" + currentFloor + "] Door closed");
     }
 
     private void tryPickUp() throws InterruptedException {
@@ -156,10 +168,10 @@ public class SequentialElevator implements Elevator {
     private void stop() {
         if (state != State.STOPPED) {
             state = State.STOPPED;
-            System.out.println("[" + currentFloor + "] STOPPED");
+            print("[" + currentFloor + "] STOPPED");
         } else {
             state = State.IDLE;
-            System.out.println("[" + currentFloor + "] RESUMED");
+            print("[" + currentFloor + "] RESUMED");
         }
     }
 
@@ -210,5 +222,14 @@ public class SequentialElevator implements Elevator {
         private enum Type {
             MOVE, STOP
         }
+    }
+
+    private void print(String message) {
+        System.out.println((toString() + message));
+    }
+
+    @Override
+    public String toString() {
+        return "[SequentialElevator{hashcode=" + hashCode() + "}] ";
     }
 }
