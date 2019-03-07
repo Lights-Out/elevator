@@ -16,12 +16,12 @@ public class SequentialElevatorTest {
     @Test
     public void shouldHandlePairedRequest() throws InterruptedException {
         SequentialElevator elevator = new SequentialElevator(1);
-        elevator.requestUp(1, 4);
-        elevator.requestUp(2, 5);
-        elevator.requestUp(3, 9);
-        elevator.requestUp(2, 5);
-        elevator.requestDown(4, 2);
-        elevator.requestDown(7, 1);
+        elevator.requestMoving(1, 4);
+        elevator.requestMoving(2, 5);
+        elevator.requestMoving(3, 9);
+        elevator.requestMoving(2, 5);
+        elevator.requestMoving(4, 2);
+        elevator.requestMoving(7, 1);
         elevator.run();
         Thread.sleep(DELAY_TIME);
         assertThat(elevator.orderedRequests, empty());
@@ -31,15 +31,15 @@ public class SequentialElevatorTest {
     public void shouldInterruptMovingOnStopCommand() throws InterruptedException {
 
         SequentialElevator elevator = new SequentialElevator(1);
-        elevator.requestUp(1, 4);
-        elevator.requestUp(2, 3);
-        elevator.requestUp(2, 3);
-        elevator.requestUp(2, 3);
+        elevator.requestMoving(1, 4);
+        elevator.requestMoving(2, 3);
+        elevator.requestMoving(2, 3);
+        elevator.requestMoving(2, 3);
         elevator.requestStop();
         elevator.requestStop();
         elevator.requestStop();
-        elevator.requestDown(4, 2);
-        elevator.requestDown(7, 1);
+        elevator.requestMoving(4, 2);
+        elevator.requestMoving(7, 1);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(elevator::run);
@@ -52,15 +52,15 @@ public class SequentialElevatorTest {
     @Test
     public void shouldProceedOnSecondStopCommand() throws InterruptedException {
         SequentialElevator elevator = new SequentialElevator(1);
-        elevator.requestUp(1, 4);
-        elevator.requestUp(2, 5);
-        elevator.requestUp(3, 9);
+        elevator.requestMoving(1, 4);
+        elevator.requestMoving(2, 5);
+        elevator.requestMoving(3, 9);
         elevator.requestStop();
         elevator.requestStop();
         elevator.requestStop();
         elevator.requestStop();
-        elevator.requestDown(4, 2);
-        elevator.requestDown(7, 1);
+        elevator.requestMoving(4, 2);
+        elevator.requestMoving(7, 1);
         elevator.run();
         Thread.sleep(DELAY_TIME);
         assertThat(elevator.orderedRequests, empty());
@@ -70,16 +70,16 @@ public class SequentialElevatorTest {
     public void shouldProceedOnAlternatingStopAndFloorCommands() throws InterruptedException {
 
         SequentialElevator elevator = new SequentialElevator(1);
-        elevator.requestUp(1, 4);
-        elevator.requestUp(2, 3);
+        elevator.requestMoving(1, 4);
+        elevator.requestMoving(2, 3);
         elevator.requestStop();
         elevator.requestStop();
-        elevator.requestUp(2, 3);
-        elevator.requestUp(2, 3);
+        elevator.requestMoving(2, 3);
+        elevator.requestMoving(2, 3);
         elevator.requestStop();
         elevator.requestStop();
-        elevator.requestDown(4, 2);
-        elevator.requestDown(7, 1);
+        elevator.requestMoving(4, 2);
+        elevator.requestMoving(7, 1);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(elevator::run);
@@ -93,13 +93,13 @@ public class SequentialElevatorTest {
     public void shouldInterruptMovingOnStopGoStopCommand() throws InterruptedException {
 
         SequentialElevator elevator = new SequentialElevator(1);
-        elevator.requestUp(1, 4);
-        elevator.requestUp(2, 3);
+        elevator.requestMoving(1, 4);
+        elevator.requestMoving(2, 3);
         elevator.requestStop();
-        elevator.requestUp(3, 5);
+        elevator.requestMoving(3, 5);
         elevator.requestStop();
-        elevator.requestDown(4, 2);
-        elevator.requestDown(7, 1);
+        elevator.requestMoving(4, 2);
+        elevator.requestMoving(7, 1);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(elevator::run);

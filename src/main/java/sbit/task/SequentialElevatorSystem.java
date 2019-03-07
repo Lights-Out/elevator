@@ -28,18 +28,9 @@ public class SequentialElevatorSystem {
      * @param floorFrom Current caller's floor
      * @param floorTo Destination floor
      */
-    public void requestUp(int floorFrom, int floorTo) {
+    public void requestMoving(int floorFrom, int floorTo) {
         SequentialElevator chosenOne = chooseElevator(floorFrom, floorTo);
-        chosenOne.requestUp(floorFrom, floorTo);
-    }
-
-    /**
-     * @param floorFrom Current caller's floor
-     * @param floorTo Destination floor
-     */
-    public void requestDown(int floorFrom, int floorTo) {
-        SequentialElevator chosenOne = chooseElevator(floorFrom, floorTo);
-        chosenOne.requestDown(floorFrom, floorTo);
+        chosenOne.requestMoving(floorFrom, floorTo);
     }
 
     private SequentialElevator chooseElevator(int floorFrom, int floorTo) {

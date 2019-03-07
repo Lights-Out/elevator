@@ -28,14 +28,10 @@ public class SequentialElevator implements Elevator {
         this.floorReachTime = FLOOR_HEIGHT * velocityMillis;
     }
 
-    public void requestUp(int floorFrom, int floorTo) {
-        putRequest(floorFrom, upFloors);
-        putRequest(floorTo, upFloors);
-    }
-
-    public void requestDown(int floorFrom, int floorTo) {
-        putRequest(floorFrom, downFloors);
-        putRequest(floorTo, downFloors);
+    public void requestMoving(int floorFrom, int floorTo) {
+        TreeSet<Request> target = chooseStorageByFloors(floorFrom, floorTo);
+        putRequest(floorFrom, target);
+        putRequest(floorTo, target);
     }
 
     public void requestStop() {
@@ -73,6 +69,10 @@ public class SequentialElevator implements Elevator {
                 .filter(collection ->  !collection.isEmpty())
                 .map(TreeSet::last)
                 .map(Request::getFloor);
+    }
+
+    private TreeSet<Request> chooseStorageByFloors(int floorFrom, int floorTo) {
+        return floorTo > floorFrom ? upFloors : downFloors;
     }
 
     /**

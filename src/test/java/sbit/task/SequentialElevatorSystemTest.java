@@ -10,44 +10,44 @@ public class SequentialElevatorSystemTest {
     public void shouldPreferMinimalDifferenceInFloorsForUp() {
 
         SequentialElevator first = spy(new SequentialElevator());
-        first.requestUp(1, 2);
+        first.requestMoving(1, 2);
 
         SequentialElevator second = spy(new SequentialElevator());
-        second.requestUp(1, 3);
-        second.requestUp(1, 4);
-        second.requestUp(1, 8);
+        second.requestMoving(1, 3);
+        second.requestMoving(1, 4);
+        second.requestMoving(1, 8);
 
         SequentialElevator third = spy(new SequentialElevator());
-        third.requestUp(6, 10);
-        third.requestUp(11, 12);
+        third.requestMoving(6, 10);
+        third.requestMoving(11, 12);
 
         SequentialElevatorSystem system = new SequentialElevatorSystem(new SequentialElevator[]{first, second, third});
-        system.requestUp(5, 6);
-        verify(first, never()).requestUp(5, 6);
-        verify(second, times(1)).requestUp(5, 6);
-        verify(third, never()).requestUp(5, 6);
+        system.requestMoving(5, 6);
+        verify(first, never()).requestMoving(5, 6);
+        verify(second, times(1)).requestMoving(5, 6);
+        verify(third, never()).requestMoving(5, 6);
     }
 
     @Test
     public void shouldPreferMinimalDifferenceInFloorsForDown() {
 
         SequentialElevator first = spy(new SequentialElevator());
-        first.requestDown(3, 2);
+        first.requestMoving(3, 2);
 
         SequentialElevator second = spy(new SequentialElevator());
-        second.requestDown(3, 2);
-        second.requestDown(7, 3);
-        second.requestDown(8, 4);
+        second.requestMoving(3, 2);
+        second.requestMoving(7, 3);
+        second.requestMoving(8, 4);
 
         SequentialElevator third = spy(new SequentialElevator());
-        third.requestDown(10, 7);
-        third.requestDown(14, 11);
+        third.requestMoving(10, 7);
+        third.requestMoving(14, 11);
 
         SequentialElevatorSystem system = new SequentialElevatorSystem(new SequentialElevator[]{first, second, third});
-        system.requestDown(6, 5);
-        verify(first, never()).requestDown(6, 5);
-        verify(second, never()).requestDown(6, 5);
-        verify(third, times(1)).requestDown(6, 5);
+        system.requestMoving(6, 5);
+        verify(first, never()).requestMoving(6, 5);
+        verify(second, never()).requestMoving(6, 5);
+        verify(third, times(1)).requestMoving(6, 5);
     }
 
     @Test
@@ -57,25 +57,25 @@ public class SequentialElevatorSystemTest {
         SequentialElevator third = spy(new SequentialElevator(1));
 
         SequentialElevatorSystem system = new SequentialElevatorSystem(new SequentialElevator[]{first, second, third});
-        system.requestUp(5, 8);
-        system.requestUp(4, 11);
-        system.requestUp(4, 5);
-        system.requestUp(5, 7);
-        system.requestUp(6, 8);
-        system.requestUp(1, 2);
+        system.requestMoving(5, 8);
+        system.requestMoving(4, 11);
+        system.requestMoving(4, 5);
+        system.requestMoving(5, 7);
+        system.requestMoving(6, 8);
+        system.requestMoving(1, 2);
 
-        system.requestDown(12, 1);
-        system.requestDown(3, 1);
-        system.requestDown(4, 1);
-        system.requestDown(8, 1);
-        system.requestDown(14, 7);
-        system.requestDown(4, 8);
-        system.requestDown(5, 2);
-        system.requestDown(16, 4);
-        system.requestDown(7, 3);
+        system.requestMoving(12, 1);
+        system.requestMoving(3, 1);
+        system.requestMoving(4, 1);
+        system.requestMoving(8, 1);
+        system.requestMoving(14, 7);
+        system.requestMoving(4, 8);
+        system.requestMoving(5, 2);
+        system.requestMoving(16, 4);
+        system.requestMoving(7, 3);
 
         system.run();
 
-        verify(first, atLeastOnce()).requestDown(anyInt(), anyInt());
+        verify(first, atLeastOnce()).requestMoving(anyInt(), anyInt());
     }
 }
